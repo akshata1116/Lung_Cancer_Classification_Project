@@ -5,6 +5,24 @@ from PIL import Image
 import numpy as np
 import timm
 from torchvision import transforms
+import gdown
+import os
+
+def download_models():
+    os.makedirs("models", exist_ok=True)
+
+    files = {
+        "best_densenet121_model.h5": "1Iom9OgT_ZO0SWozE7VtPqXttK-Y51nZy",
+        "best_fusion_model.h5": "1iVElAsQleizV53ndz20i4hblwlq9-Iyp",
+        "best_inceptionv3_model.h5": "1LiueIEmFmT-YR47_m82rtrDq5gZDJJ_Y",
+        "final_model.pth": "13WR7Mvs-odTYy7SpNlntv8M3NKDLjTSw"
+    }
+
+    for filename, file_id in files.items():
+        path = f"models/{filename}"
+        if not os.path.exists(path):
+            url = f"https://drive.google.com/uc?id={file_id}"
+            gdown.download(url, path, quiet=False)
 
 # -------------------------------
 # PAGE CONFIG
@@ -65,6 +83,8 @@ def extract_features(image, densenet, inception):
 
     combined = np.concatenate([feat1, feat2], axis=1)
     return combined
+
+download_models()
 
 # -------------------------------
 # LOAD MODELS
